@@ -1,0 +1,53 @@
+{
+  "name": "rxjs-profiler",
+  "version": "0.0.1",
+  "description": "rxjs profiler devtools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grachpower/rxjs-profiler.git"
+  },
+  "keywords": [
+    "rxjs",
+    "profiler",
+    "devtools"
+  ],
+  "author": "Artyom Andreev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grachpower/rxjs-profiler/issues"
+  },
+  "homepage": "https://github.com/grachpower/rxjs-profiler#readme",
+  "dependencies": {
+    "jest": "^23.4.1",
+    "rxjs": "^6.2.2",
+    "typescript": "^2.9.2",
+    "webpack-cli": "^3.0.8"
+  },
+  "devDependencies": {
+    "size-limit": "^0.18.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "size-limit": [
+    {
+      "path": "lib/*.js",
+      "limit": "9 KB"
+    }
+  ]
+}
