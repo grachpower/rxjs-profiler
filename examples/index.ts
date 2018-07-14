@@ -1,5 +1,6 @@
 import { Subject } from "rxjs";
 import { tap } from "rxjs/operators";
+import '../lib/index';
 
 const stream$ = new Subject();
 
