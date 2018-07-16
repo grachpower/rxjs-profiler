@@ -1,26 +1,7 @@
-import { Observable } from "rxjs";;
+import { patchSubscribe } from "./subscribe-adapter";
+import { patchUnsubscribe } from "./unsubscribe-adapter";
 
-// console.log(originalSubscribe.toString());
-function init(): void {
+export function initRxjsProfiler(): void {
     patchSubscribe();
     patchUnsubscribe();
 }
-
-function patchSubscribe(): void {
-    const originalSubscribe = Observable.prototype.subscribe;
-
-    Observable.prototype.subscribe = subscribeAdapter;
-
-    function subscribeAdapter(args?) {
-        console.log('subscribed');
-
-        return originalSubscribe.apply(Observable, args);
-    }
-}
-
-function patchUnsubscribe(): void {
-
-
-}
-
-init();

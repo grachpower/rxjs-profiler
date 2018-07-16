@@ -4,7 +4,12 @@
   "description": "rxjs profiler devtools",
   "main": "index.js",
   "scripts": {
-    "start:example": "ts-node ./examples/index.ts"
+    "start:example": "ts-node ./examples/index.ts",
+    "test": "npm run lint && jest",
+    "build": "npm run clean:dist && npm run test && tsc ./src/**.ts --outDir lib && npm run size",
+    "size": "size-limit",
+    "clean:dist": "npm run rimraf -- lib",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,7 +27,9 @@
   },
   "homepage": "https://github.com/grachpower/rxjs-profiler#readme",
   "dependencies": {
+    "@types/jest": "^23.1.6",
     "jest": "^23.4.1",
+    "rimraf": "^2.6.2",
     "rxjs": "^6.2.2",
     "ts-lint": "^4.5.1",
     "ts-node": "^7.0.0",
