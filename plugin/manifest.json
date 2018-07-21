@@ -1,0 +1,10 @@
+{
+  "name": "RXJS-profiler",
+  "version": "1.0",
+  "description": "Plugin to watch over RXJS stream",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}

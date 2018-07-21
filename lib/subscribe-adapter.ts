@@ -9,7 +9,7 @@ export function patchSubscribe(): any {
 function pathedSubscribe(originalSub: Function): any {
     return function(args?) {
         const date = new Date();
-        console.log(`subscribed, date: ${date}`);
+        console.log(`Subscribed: name - ${this._debugName},  date - ${date}`);
 
         return originalSub.bind(this)(args);
     };

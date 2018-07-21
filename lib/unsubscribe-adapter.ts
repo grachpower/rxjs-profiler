@@ -21,7 +21,7 @@ function patchSubjectUnsubscribe(): any {
 function patchedObservableUnsubscribe(originalUnsubscribe: Function): any {
     return function (args?) {
         const date = new Date();
-        console.log(`Observable unsubscribed: ${date}`);
+        console.log(`Observable unsubscribed: name - ${this._debugName}, date - ${date}`);
 
         return originalUnsubscribe.bind(this)(args);
     };
@@ -30,7 +30,7 @@ function patchedObservableUnsubscribe(originalUnsubscribe: Function): any {
 function patchedSubjectUbsubscribe(originalUnsubscribe: Function): any {
     return function (args?) {
         const date = new Date();
-        console.log(`Subject unsubscribed: ${date}`);
+        console.log(`Observable unsubscribed: name - ${this._debugName}, date - ${date}`);
 
         return originalUnsubscribe.bind(this)(args);
     };
