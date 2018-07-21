@@ -1,16 +1,36 @@
-import { Subscription } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 
-export function patchUnsubscribe(): any {
+export function patchUnsubscribe() {
+    patchObservableUnsubscribe();
+    patchSubjectUnsubscribe()
+}
+
+function patchObservableUnsubscribe(): any {
     const originalUnsubscribe = Subscription.prototype.unsubscribe;
 
-    Subscription.prototype.unsubscribe = patchedUnsubscribe(originalUnsubscribe);
+    Subscription.prototype.unsubscribe = patchedObservableUnsubscribe(originalUnsubscribe);
+}
+
+function patchSubjectUnsubscribe(): any {
+    const originalUnsubscribe = Subject.prototype.unsubscribe;
+
+    Subject.prototype.unsubscribe = patchedSubjectUbsubscribe(originalUnsubscribe);
 }
 
 
-function patchedUnsubscribe(originalUnsubscribe: Function): any {
-    return function(args?) {
+function patchedObservableUnsubscribe(originalUnsubscribe: Function): any {
+    return function (args?) {
         const date = new Date();
-        console.log(`unsubscribed: ${date}`);
+        console.log(`Observable unsubscribed: ${date}`);
+
+        return originalUnsubscribe.bind(this)(args);
+    };
+}
+
+function patchedSubjectUbsubscribe(originalUnsubscribe: Function): any {
+    return function (args?) {
+        const date = new Date();
+        console.log(`Subject unsubscribed: ${date}`);
 
         return originalUnsubscribe.bind(this)(args);
     };
