@@ -24,11 +24,11 @@
   "dependencies": {
     "jest": "^23.4.1",
     "rxjs": "^6.2.2",
-    "typescript": "^2.9.2",
+    "typescript": "^3.2.4",
     "webpack-cli": "^3.0.8"
   },
   "devDependencies": {
-    "size-limit": "^0.18.5"
+    "size-limit": "^0.21.1"
   },
   "jest": {
     "transform": {
