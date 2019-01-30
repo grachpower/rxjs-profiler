@@ -1,5 +1,5 @@
-import { Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { map } from "rxjs/internal/operators";
 import { debug } from "../lib/operators/debug";
 
@@ -11,12 +11,12 @@ export const testSubjectSubscription = () => {
             debug('testName'),
             tap(value => console.log(value)),
             map(data => data),
+            // switchMap(() => of('switchMap')),
         )
         .subscribe();
 
     stream$.next('lol');
     stream$.next('kek');
-    // stream$.next('cheburek');
 
     stream$.unsubscribe();
 
