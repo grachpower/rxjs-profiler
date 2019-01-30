@@ -1,4 +1,5 @@
 import { Subject, Subscription } from "rxjs";
+import { stacktrace } from "./trace";
 
 export function patchUnsubscribe() {
     patchObservableUnsubscribe();
@@ -22,6 +23,7 @@ function patchedObservableUnsubscribe(originalUnsubscribe: Function): any {
     return function (args?) {
         const date = new Date();
         console.log(`Observable unsubscribed: name - ${this._debugName}, date - ${date}`);
+        // console.log(stacktrace());
 
         return originalUnsubscribe.bind(this)(args);
     };
@@ -31,6 +33,7 @@ function patchedSubjectUbsubscribe(originalUnsubscribe: Function): any {
     return function (args?) {
         const date = new Date();
         console.log(`Observable unsubscribed: name - ${this._debugName}, date - ${date}`);
+        // console.log(stacktrace());
 
         return originalUnsubscribe.bind(this)(args);
     };

@@ -14,8 +14,5 @@ function handleData(message) {
     dataElement.appendChild(element);
 }
 
-// const tabId = chrome.devtools.inspectedWindow.tabId;
-// const port = chrome.runtime.connect(null, { name: `panel-${tabId}` });
-
 console.log('TURBO KEKE 4Eburek!!');
 console.log(port);

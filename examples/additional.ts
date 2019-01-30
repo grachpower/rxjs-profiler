@@ -16,7 +16,20 @@ export const testSubjectSubscription = () => {
 
     stream$.next('lol');
     stream$.next('kek');
-    stream$.next('cheburek');
+    // stream$.next('cheburek');
 
     stream$.unsubscribe();
+
+    // const stream2$ = new Subject();
+    //
+    // stream2$
+    //     .pipe(
+    //         debug('name for test'),
+    //         tap(value => console.log(value)),
+    //         map(data => data),
+    //     )
+    //     .subscribe();
+    //
+    // stream2$.next('lol');
+    // stream2$.next('cheburek');
 };
