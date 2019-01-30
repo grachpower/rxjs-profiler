@@ -1,20 +1,25 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+const connections = {};
 
-'use strict';
+chrome.runtime.onConnect.addListener(function (port) {
+    if (port.name === "content") {
+        const tabId = port.sender.tab.id;
+        connections[tabId] = {
+            ...(connections[tabId] ?  connections[tabId] : {}),
+            content: port
+        };
+        port.onMessage.addListener( (message) => {
+            connections[tabId].panel && connections[tabId].panel.postMessage(message)
+        })
 
-chrome.runtime.onInstalled.addListener(function() {
-    chrome.storage.sync.set({color: '#3aa757'}, function() {
-        console.log('The color is green.');
-    });
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [new chrome.declarativeContent.PageStateMatcher({
-                pageUrl: {hostEquals: 'developer.chrome.com'},
-            })
-            ],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-    });
+    } else if (port.name.startsWith("panel")){
+        const [name, tabId] = port.name.split('-');
+        connections[tabId] = {
+            ...(connections[tabId] ?  connections[tabId] : {}),
+            panel: port
+        };
+        port.onDisconnect.addListener(function (port) {
+            delete connections[tabId];
+        })
+
+    }
 });

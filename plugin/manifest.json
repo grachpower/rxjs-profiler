@@ -3,7 +3,6 @@
   "version": "1.0",
   "description": "Plugin to watch over RXJS stream",
   "manifest_version": 2,
-  "permissions": ["declarativeContent", "storage", "activeTab"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -23,5 +22,6 @@
     "32": "images/icon32.png",
     "48": "images/icon48.png",
     "128": "images/icon128.png"
-  }
+  },
+  "devtools_page": "devtools.html"
 }
