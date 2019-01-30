@@ -6,7 +6,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: './src/examples/index.ts',
+        main: './examples/index.ts',
     },
     output: {
         filename: '[name].[hash].js',
@@ -20,13 +20,13 @@ module.exports = {
             chunks: ['main'],
         }),
 
-        new UglifyJsPlugin(),
+        // new UglifyJsPlugin(),
 
-        new CopyWebpackPlugin([
-            { from: 'src/assets', to: 'assets' },
-        ]),
+        // new CopyWebpackPlugin([
+        //     { from: 'src/assets', to: 'assets' },
+        // ]),
     ],
-
+    devtool: 'inline-source-map',
     resolve: {
         extensions: [' ', '.html', '.js', '.ts', 'css'],
     },
@@ -46,12 +46,6 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
-                }
             },
             {
                 test: /\.ts$/,
@@ -83,7 +77,6 @@ module.exports = {
         hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
         https: false, // true for self-signed, object for cert authority
         noInfo: true, // only errors & warns on hot reload
-        hot: true,
         inline: true,
         // ...
     },
