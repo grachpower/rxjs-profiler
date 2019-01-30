@@ -1,7 +1,8 @@
 const connections = {};
 
 chrome.runtime.onConnect.addListener(function (port) {
-    if (port.name === "content") {
+    console.log(port);
+    if (port.name === 'content') {
         const tabId = port.sender.tab.id;
         connections[tabId] = {
             ...(connections[tabId] ?  connections[tabId] : {}),
@@ -11,12 +12,13 @@ chrome.runtime.onConnect.addListener(function (port) {
             connections[tabId].panel && connections[tabId].panel.postMessage(message)
         })
 
-    } else if (port.name.startsWith("panel")){
+    } else if (port.name.startsWith('panel')){
         const [name, tabId] = port.name.split('-');
         connections[tabId] = {
             ...(connections[tabId] ?  connections[tabId] : {}),
             panel: port
         };
+
         port.onDisconnect.addListener(function (port) {
             delete connections[tabId];
         })
