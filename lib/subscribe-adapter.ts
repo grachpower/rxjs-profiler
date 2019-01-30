@@ -12,7 +12,6 @@ export function patchSubscribe(): any {
 
 function patchedSubscribe(originalSub: Function): any {
     return function(args?) {
-        const date = new Date();
         // console.log(stacktrace());
 
         let debugName = NOOP_ID;
@@ -33,6 +32,7 @@ function patchedSubscribe(originalSub: Function): any {
 
         if (debugName !== NOOP_ID) {
             // Handle subscription
+            const date = new Date();
             console.log(`Subscribed: name - ${debugName},  date - ${date}`);
         }
 
