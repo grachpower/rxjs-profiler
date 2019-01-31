@@ -10,6 +10,7 @@
     "size": "size-limit",
     "clean:dist": "npm run rimraf -- lib",
     "prepublish": "npm run build",
+    "rimraf": "rimraf",
     "start": "webpack-dev-server --config webpack.examples.config.js --hot --open --watch --mode=development"
   },
   "repository": {
