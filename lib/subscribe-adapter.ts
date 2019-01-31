@@ -16,18 +16,11 @@ function patchedSubscribe(originalSub: Function): any {
 
         let debugName = NOOP_ID;
 
-        if (this.source && this.source._debugName) {
-            debugName = this.source._debugName;
-        } else if (this._debugName) {
-            debugName = this._debugName;
-        }
 
-        if (!debugName) {
-            if (this.source) {
-                this.source._debugName = `__gen:${generateId()}`;
-            } else {
-                this._debugName = `__gen:${generateId()}`;
-            }
+        if (this._debugName) {
+            debugName = this._debugName;
+        } else {
+            debugName = generateDebugName();
         }
 
         if (debugName !== NOOP_ID) {
@@ -39,4 +32,20 @@ function patchedSubscribe(originalSub: Function): any {
         const result = originalSub.bind(this)(args);
         return result;
     };
+}
+
+function getDebugName(source: Observable<any>): string {
+    if ((source as any)._debugName) {
+        return (source as any)._debugName;
+    }
+
+    if (source.source) {
+        return getDebugName(source.source);
+    }
+
+    return `__gen:${generateId()}`;
+}
+
+function generateDebugName() {
+    return `__gen:${generateId()}`;
 }
