@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start:example": "ts-node ./examples/index.ts",
-    "test": "npm run lint && jest",
     "build": "npm run clean:dist && npm run test && tsc ./src/**.ts --outDir lib && npm run size",
     "size": "size-limit",
     "clean:dist": "npm run rimraf -- lib",
-    "prepublish": "npm run build",
     "rimraf": "rimraf",
     "start": "webpack-dev-server --config webpack.examples.config.js --hot --open --watch --mode=development"
   },
@@ -46,25 +44,5 @@
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
-  "size-limit": [
-    {
-      "path": "lib/*.js",
-      "limit": "9 KB"
-    }
-  ]
+  }
 }
