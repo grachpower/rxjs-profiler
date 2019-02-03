@@ -1,11 +1,12 @@
 import { initRxjsProfiler } from '../lib';
 
-import { testSubjectSubscription } from "./additional";
+import { testObservableSubscription, testSubjectSubscription } from "./additional";
 
 
 initRxjsProfiler();
 
-testSubjectSubscription();
+// testSubjectSubscription();
+testObservableSubscription();
 
 setTimeout(() => {
     postMessage(
