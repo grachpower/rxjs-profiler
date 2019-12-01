@@ -1,4 +1,4 @@
-import { config, Observable, PartialObserver, Subscription } from "rxjs";
+import {config, Observable, PartialObserver, Subscriber, Subscription} from "rxjs";
 import { stacktrace } from "./trace";
 
 import { generateId } from "./id-gen";
@@ -37,7 +37,6 @@ function newSubscribe(observerOrNext?: PartialObserver<any> | ((value: any) => v
 
     if (debugName !== NOOP_ID) {
         console.log('|-----------------------|');
-        console.log(this);
         const date = new Date();
         console.log(`Subscribed: name - ${debugName},  date - ${date}`);
         console.log('|-----------------------|');
@@ -52,6 +51,8 @@ function newSubscribe(observerOrNext?: PartialObserver<any> | ((value: any) => v
                 this._trySubscribe(sink)
         );
     }
+
+    sink.add(teardownCondition(sink));
 
     if (config.useDeprecatedSynchronousErrorHandling) {
         if (sink.syncErrorThrowable) {
@@ -108,4 +109,13 @@ function getDebugDepthIndex(source: Observable<any>, name: string): number {
     }
 
     return -1;
+}
+
+function teardownCondition(subscriber: Subscriber<any>): () => any {
+    return () => {
+        const date = new Date();
+        console.log('|-----------------------|');
+        console.log(`Observable unsubscribed: name - ${(subscriber as any)._debugName}, date - ${date}`);
+        console.log('|-----------------------|');
+    };
 }

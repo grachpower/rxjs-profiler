@@ -1,1 +1,1 @@
-    export const NOOP_ID = '_NOOP_';
+export const NOOP_ID = '_NOOP_';

@@ -5,15 +5,15 @@ import { testObservableSubscription, testSubjectSubscription } from "./additiona
 
 initRxjsProfiler();
 
-// testSubjectSubscription();
-testObservableSubscription();
+testSubjectSubscription();
+// testObservableSubscription();
 
-setTimeout(() => {
-    postMessage(
-        {
-            message: 'KEK',
-            source: "rxjs-profiler"
-        },
-        "*"
-    );
-}, 1000);
+// setTimeout(() => {
+//     postMessage(
+//         {
+//             message: 'KEK',
+//             source: "rxjs-profiler"
+//         },
+//         "*"
+//     );
+// }, 1000);
