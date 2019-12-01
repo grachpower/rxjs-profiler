@@ -31,7 +31,7 @@ export const testObservableSubscription = () => {
           debug('mapDebug'),
           switchMap(() => of('switchMap')),
           debug('switchDebug'),
-          // switchMap(() => NEVER),
+          switchMap(() => NEVER),
       )
       .subscribe();
 };

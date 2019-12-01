@@ -9,12 +9,12 @@ testSubjectSubscription();
 testObservableSubscription();
 
 // TODO postMessage in development purposes
-// setTimeout(() => {
-//     postMessage(
-//         {
-//             message: 'KEK',
-//             source: "rxjs-profiler"
-//         },
-//         "*"
-//     );
-// }, 1000);
+setTimeout(() => {
+    postMessage(
+        {
+            message: 'KEK',
+            source: "rxjs-profiler"
+        },
+        "*"
+    );
+}, 1000);
