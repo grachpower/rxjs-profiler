@@ -1,9 +1,11 @@
 import {config, Observable, PartialObserver, Subscriber, Subscription} from "rxjs";
-import { stacktrace } from "./trace";
 
-import { generateId } from "./id-gen";
-import { NOOP_ID } from "./constants";
-import { toSubscriber } from "rxjs/internal-compatibility";
+import {generateId} from "./id-gen";
+import {MessageTypes, NOOP_ID} from "./constants";
+import {toSubscriber} from "rxjs/internal-compatibility";
+import {MessageModel} from "./models/message.model";
+import {sendMessage} from "./messenger";
+import {stacktrace} from "./trace";
 
 export function patchSubscribe(): any {
     Observable.prototype.subscribe = newSubscribe;
@@ -36,10 +38,15 @@ function newSubscribe(observerOrNext?: PartialObserver<any> | ((value: any) => v
     }
 
     if (debugName !== NOOP_ID) {
-        console.log('|-----------------------|');
-        const date = new Date();
-        console.log(`Subscribed: name - ${debugName},  date - ${date}`);
-        console.log('|-----------------------|');
+        const subscribeMessage = new MessageModel({
+            name: debugName,
+            date: new Date(),
+            type: MessageTypes.SUBSCRIBE,
+            trace: stacktrace(),
+            depthIndex: this._debugIndex,
+        });
+
+        sendMessage(subscribeMessage);
     }
 
     if (operator) {
@@ -64,23 +71,6 @@ function newSubscribe(observerOrNext?: PartialObserver<any> | ((value: any) => v
     }
 
     return sink;
-}
-
-
-
-/**
- * @deprecated
- */
-function getDebugName(source: Observable<any>): string {
-    if ((source as any)._debugName) {
-        return (source as any)._debugName;
-    }
-
-    if (source.source) {
-        return getDebugName(source.source);
-    }
-
-    return `__gen:${generateId()}`;
 }
 
 function generateDebugName() {
@@ -113,9 +103,13 @@ function getDebugDepthIndex(source: Observable<any>, name: string): number {
 
 function teardownCondition(subscriber: Subscriber<any>): () => any {
     return () => {
-        const date = new Date();
-        console.log('|-----------------------|');
-        console.log(`Observable unsubscribed: name - ${(subscriber as any)._debugName}, date - ${date}`);
-        console.log('|-----------------------|');
+        const unsubscribeMessage = new MessageModel({
+            name: (subscriber as any)._debugName,
+            date: new Date(),
+            type: MessageTypes.UNSUBSCRIBE,
+            depthIndex: (subscriber as any)._debugIndex,
+        });
+
+        sendMessage(unsubscribeMessage);
     };
 }

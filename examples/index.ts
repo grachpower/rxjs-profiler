@@ -6,8 +6,9 @@ import { testObservableSubscription, testSubjectSubscription } from "./additiona
 initRxjsProfiler();
 
 testSubjectSubscription();
-// testObservableSubscription();
+testObservableSubscription();
 
+// TODO postMessage in development purposes
 // setTimeout(() => {
 //     postMessage(
 //         {
