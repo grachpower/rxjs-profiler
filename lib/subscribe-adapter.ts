@@ -40,7 +40,7 @@ function newSubscribe(observerOrNext?: PartialObserver<any> | ((value: any) => v
     if (debugName !== NOOP_ID) {
         const subscribeMessage = new MessageModel({
             name: debugName,
-            date: new Date(),
+            date: Date.now(),
             type: MessageTypes.SUBSCRIBE,
             trace: stacktrace(),
             depthIndex: this._debugIndex,
@@ -105,7 +105,7 @@ function teardownCondition(subscriber: Subscriber<any>): () => any {
     return () => {
         const unsubscribeMessage = new MessageModel({
             name: (subscriber as any)._debugName,
-            date: new Date(),
+            date: Date.now(),
             type: MessageTypes.UNSUBSCRIBE,
             depthIndex: (subscriber as any)._debugIndex,
         });

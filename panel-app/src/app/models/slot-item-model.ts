@@ -1,9 +1,9 @@
-export type SlotItemType = [string, string, string, Date, Date];
+export type SlotItemType = [string, string, string, number, number];
 
 export interface SlotItemModel {
   name: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: number;
+  endDate: number;
   isEnded: boolean;
 }

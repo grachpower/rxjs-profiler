@@ -9,5 +9,5 @@ export function stacktrace(): string {
     }
 
     stack = stack.split('\n').map(function (line) { return line.trim(); });
-    return stack.splice(stack[0] == 'Error' ? 2 : 1);
+    return stack.splice(stack[0] == 'Error' ? 2 : 1).join(' ');
 }

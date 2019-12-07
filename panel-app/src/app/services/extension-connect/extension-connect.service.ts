@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 
 import {MessageDto} from "../../../../../lib/models/message.model";
 import {AppStatusTypes} from "../../models/app-status-types";
+import {MessageTypes} from "../../../../../lib/constants";
 
 declare var port: any;
 declare var chrome: any;
@@ -20,7 +21,7 @@ export class ExtensionConnectService {
       const port = chrome.runtime.connect(null, { name: `panel-${tabId}` });
 
       port.onMessage.addListener((data: MessageDto) => {
-        this.handleDataFromPort(data);
+        this.handleMessage(data);
       });
     } catch (e) {
       console.warn('Port not defined, run in devtools');
@@ -41,6 +42,19 @@ export class ExtensionConnectService {
 
   public resetData(): void {
     this.rawData$.next([]);
+    console.log('reload');
+  }
+
+  private handleMessage(message: MessageDto): void {
+    switch (message.type) {
+      case MessageTypes.SUBSCRIBE:
+      case MessageTypes.UNSUBSCRIBE:
+        this.handleDataFromPort(message);
+        break;
+      case MessageTypes.RELOAD:
+        this.resetData();
+        break;
+    }
   }
 
   private handleDataFromPort(data: MessageDto): void {

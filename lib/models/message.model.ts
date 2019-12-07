@@ -3,15 +3,15 @@ import { MessageTypes } from "../constants";
 export interface MessageDto {
     type: MessageTypes;
     trace?: string;
-    date: Date;
-    name: string;
-    depthIndex: number;
+    date?: number;
+    name?: string;
+    depthIndex?: number;
 }
 
 export class MessageModel {
     public type: MessageTypes;
     public trace: string;
-    public date: Date;
+    public date: number;
     public name: string;
     public depthIndex: number;
 

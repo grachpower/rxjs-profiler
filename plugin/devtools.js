@@ -1,6 +1,6 @@
 chrome.devtools.panels.create(
     'RxJS profiler',
     null,
-    'panel/panel.html',
+    'panel/index.html',
     null,
 );

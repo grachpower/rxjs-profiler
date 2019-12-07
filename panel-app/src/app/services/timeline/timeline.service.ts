@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {ExtensionConnectService} from "../extension-connect/extension-connect.service";
-import {SlotItemModel, SlotItemType} from "../../models/slot-item-model";
 import {interval, Observable, of} from "rxjs";
 import {map, switchMap} from "rxjs/operators";
+
+import {ExtensionConnectService} from "../extension-connect/extension-connect.service";
+import {SlotItemModel, SlotItemType} from "../../models/slot-item-model";
 import {MessageDto} from "../../../../../lib/models/message.model";
 import {MessageTypes} from "../../../../../lib/constants";
-import {timelineDataStub} from "./data.stub";
 
-const THROTTLE_TIME = 20;
+const THROTTLE_TIME = 1000;
 
 @Injectable({
   providedIn: 'root'
@@ -37,15 +37,17 @@ export class TimelineService {
     const subItems = items.filter((item: MessageDto) => item.type === MessageTypes.SUBSCRIBE);
     const unsubItems = items.filter((item: MessageDto) => item.type === MessageTypes.UNSUBSCRIBE);
 
-    const currentDate = new Date();
+    const currentDate = Date.now();
 
     const initialModels: SlotItemModel[] = subItems.map((item: MessageDto) => {
+      const date = item.date > currentDate ? item.date + 1 : currentDate;
+
       return {
         name: item.name,
         description: item.trace,
         isEnded: false,
         startDate: item.date,
-        endDate: currentDate,
+        endDate: date,
       };
     });
 
@@ -65,10 +67,14 @@ export class TimelineService {
       }
     });
 
-    return this.transformSlotModelToSlotType(outerModels);
+    const results = this.transformSlotModelToSlotType(outerModels);
+
+    console.log('items: ', results);
+
+    return results;
   }
 
   private transformSlotModelToSlotType(models: SlotItemModel[]): SlotItemType[] {
-    return models.map((model: SlotItemModel) => ['all', model.name, model.description, model.startDate, model.endDate] as SlotItemType);
+    return models.map((model: SlotItemModel) => ['all', model.name, null, model.startDate, model.endDate] as SlotItemType);
   }
 }

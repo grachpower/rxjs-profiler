@@ -1,5 +1,5 @@
-import { MessageTypes } from "./constants";
-import { MessageModel } from "./models/message.model";
+import {MessageTypes} from "./constants";
+import {MessageModel} from "./models/message.model";
 import {report} from "./reporter";
 
 export function sendMessage(message: MessageModel): void {
@@ -10,21 +10,20 @@ export function sendMessage(message: MessageModel): void {
         case MessageTypes.UNSUBSCRIBE:
             logUnsubscribe(message);
             break;
+        case MessageTypes.RELOAD:
+            logReload(message);
+            break;
     }
 }
 
 function logSubscribe(message: MessageModel): void {
-    console.log('|-----------------------|');
-    console.log(`Observable subscribed: name - ${message.name},  date - ${message.date}`);
-    console.log('|-----------------------|');
-
     report(message);
 }
 
 function logUnsubscribe(message: MessageModel): void {
-    console.log('|-----------------------|');
-    console.log(`Observable unsubscribed: name - ${message.name}, date - ${message.date}`);
-    console.log('|-----------------------|');
+    report(message);
+}
 
+function logReload(message: MessageModel): void {
     report(message);
 }

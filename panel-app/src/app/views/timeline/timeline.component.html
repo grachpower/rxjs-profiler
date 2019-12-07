@@ -1,2 +1,11 @@
+<!--<div #container [hidden]="!(noData$ | async)">-->
+<!--</div>-->
+
 <div #container>
 </div>
+
+
+
+<ng-container *ngIf="noData$ | async">
+  No Data...
+</ng-container>

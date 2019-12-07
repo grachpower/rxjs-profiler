@@ -7,6 +7,9 @@ import { TimelineService } from "../../services/timeline/timeline.service";
 
 declare var google: any;
 
+type Table = any;
+type Chart = any;
+
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
@@ -16,9 +19,9 @@ declare var google: any;
 export class TimelineComponent implements OnInit, OnDestroy {
   @ViewChild('container', {static: true}) public container: ElementRef;
 
-  private chart: any;
-  private dataTable: any;
+  public noData$ = new Subject<boolean>();
 
+  private chart: Chart;
   private options = {
     timeline: {
       groupByRowLabel: true,
@@ -30,7 +33,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     // backgroundColor: '#ffd',
     avoidOverlappingGridLines: true,
   };
-
   private destroyed$ = new Subject<void>();
 
   constructor(
@@ -40,6 +42,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     google.charts.load("current", {packages:["timeline"]});
     google.charts.setOnLoadCallback(this.initChart.bind(this));
+
+    this.noData$.next(true);
   }
 
   public ngOnDestroy(): void {
@@ -48,41 +52,43 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   public initChart(): void {
-    const chart = new google.visualization.Timeline(this.container.nativeElement);
+    const chart: Chart = new google.visualization.Timeline(this.container.nativeElement);
     this.chart = chart;
-
-    const dataTable = new google.visualization.DataTable();
-    dataTable.addColumn({ type: 'string', id: 'Group' });
-    dataTable.addColumn({ type: 'string', id: 'Name' });
-    dataTable.addColumn({ type: 'string', role: 'tooltip' });
-    dataTable.addColumn({ type: 'date', id: 'Start' });
-    dataTable.addColumn({ type: 'date', id: 'End' });
-
-    dataTable.addRows([]);
-
-    this.dataTable = dataTable;
-
-    this.draw();
 
     this.timelineService.timelineData$
       .pipe(
         takeUntil(this.destroyed$),
       ).subscribe((data: SlotItemType[]) => {
-        this.setData(data);
-        this.draw();
+        if (data.length > 0) {
+          const table: Table = this.createTable(data);
+          this.draw(table);
+
+          this.noData$.next(true);
+        } else {
+          this.noData$.next(false);
+        }
     });
   }
 
-  public setData(data: SlotItemType[]): void {
-    this.dataTable.addRows([
-      ...data,
-    ]);
-  }
-
-  private draw(): void {
+  private draw(table: Table): void {
     requestAnimationFrame(() => {
-      this.chart.draw(this.dataTable, this.options);
+      this.chart.draw(table, this.options);
     });
+  }
+
+  private createTable(rows: SlotItemType[]): Table {
+    const dataTable = new google.visualization.DataTable();
+    dataTable.addColumn({ type: 'string', id: 'Group' });
+    dataTable.addColumn({ type: 'string', id: 'Name' });
+    dataTable.addColumn({ type: 'string', role: 'tooltip' });
+    dataTable.addColumn({ type: 'number', id: 'Start' });
+    dataTable.addColumn({ type: 'number', id: 'End' });
+
+    dataTable.addRows([
+      ...rows,
+    ]);
+
+    return dataTable;
   }
 
 }
