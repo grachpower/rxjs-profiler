@@ -22,7 +22,7 @@
     "devtools"
   ],
   "author": "Artyom Andreev",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/grachpower/rxjs-profiler/issues"
   },
