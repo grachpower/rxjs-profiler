@@ -57,12 +57,14 @@ export class TimelineService {
       if (!endItem) {
         return item;
       } else {
+        const endDate = endItem.date > item.endDate ? endItem.date : item.endDate;
+
         return {
           name: item.name,
           description: item.name,
           isEnded: true,
           startDate: item.startDate,
-          endDate: endItem.date,
+          endDate: endDate,
         }
       }
     });
