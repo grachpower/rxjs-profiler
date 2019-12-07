@@ -2,12 +2,13 @@
   "name": "rxjs-profiler",
   "version": "0.0.1",
   "description": "rxjs profiler devtools",
-  "main": "index.js",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "scripts": {
     "start:example": "ts-node ./examples/index.ts",
-    "build": "npm run clean:dist && npm run test && tsc ./src/**.ts --outDir lib && npm run size",
+    "build:lib": "npm run clean:dist && tsc",
     "size": "size-limit",
-    "clean:dist": "npm run rimraf -- lib",
+    "clean:dist": "npm run rimraf -- dist",
     "rimraf": "rimraf",
     "start": "webpack-dev-server --config webpack.examples.config.js --hot --open --watch --mode=development"
   },
