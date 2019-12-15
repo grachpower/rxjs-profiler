@@ -18,6 +18,8 @@ export class TimelineComponent implements OnInit {
       shareReplay({refCount: true, bufferSize: 1}),
     );
 
+  public timelineData$ = this.timelineService.timelineData$;
+
   constructor(
     private timelineService: TimelineService,
     private extensionConnect: ExtensionConnectService,

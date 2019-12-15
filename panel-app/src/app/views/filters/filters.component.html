@@ -7,5 +7,22 @@
 
     <div class="clear button" (click)="onClear()">
     </div>
+
+    <div class="search-container">
+      <mat-form-field>
+        <input matInput [formControl]="searchControl" placeholder="Search">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="filter-controls">
+    <mat-form-field>
+      <mat-label>Filter: </mat-label>
+      <mat-select [value]="filters[0]" (valueChange)="filterValueChange($event)">
+        <ng-container *ngFor="let item of filters">
+          <mat-option [value]="item">{{item}}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>

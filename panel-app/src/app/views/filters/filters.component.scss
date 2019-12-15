@@ -1,13 +1,16 @@
 @import '~@angular/material/theming';
 
 .filters {
-  padding: 20px;
+  padding: 5px 20px;
   border-bottom: 1px solid #fff;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .controls {
   display: flex;
+  align-items: center;
 }
 
 .button {
@@ -39,20 +42,20 @@
 
 .clear {
   position: relative;
-  border: 2px solid #000;
+  border: 2px solid #eee;
 
   &:hover {
-    border-color: #232323;
+    border-color: #808080;
   }
 
 
   &:after {
     content: '';
     position: absolute;
-    height: 100%;
+    height: 90%;
+    border: 1px solid transparent;
+    border-color: inherit;
     transform: translate(-50%, 0) rotate(45deg);
-    background-color: #000;
-    width: 2px;
     top: 0;
     left: 50%;
   }

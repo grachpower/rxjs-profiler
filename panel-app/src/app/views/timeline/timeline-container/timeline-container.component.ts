@@ -1,7 +1,14 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {Subject} from "rxjs";
-import {TimelineService} from "../../../services/timeline/timeline.service";
-import {takeUntil} from "rxjs/operators";
 import {SlotItemType} from "../../../models/slot-item-model";
 
 declare var google: any;
@@ -15,8 +22,9 @@ type Chart = any;
   styleUrls: ['./timeline-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimelineContainerComponent implements OnInit, OnDestroy {
+export class TimelineContainerComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('container', {static: true}) public container: ElementRef;
+  @Input() public data: SlotItemType[];
 
   private chart: Chart;
   private options = {
@@ -30,11 +38,8 @@ export class TimelineContainerComponent implements OnInit, OnDestroy {
     // backgroundColor: '#ffd',
     avoidOverlappingGridLines: true,
   };
+  private chartLoaded: boolean = false;
   private destroyed$ = new Subject<void>();
-
-  constructor(
-    private timelineService: TimelineService,
-  ) { }
 
   public ngOnInit(): void {
     google.charts.load("current", {packages:["timeline"]});
@@ -46,17 +51,20 @@ export class TimelineContainerComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && this.data && this.chartLoaded) {
+      const table: Table = this.createTable(this.data);
+      this.draw(table);
+    }
+  }
+
   public initChart(): void {
     const chart: Chart = new google.visualization.Timeline(this.container.nativeElement);
     this.chart = chart;
+    this.chartLoaded = true;
 
-    this.timelineService.timelineData$
-      .pipe(
-        takeUntil(this.destroyed$),
-      ).subscribe((data: SlotItemType[]) => {
-        const table: Table = this.createTable(data);
-        this.draw(table);
-    });
+    const table: Table = this.createTable(this.data);
+    this.draw(table);
   }
 
   private draw(table: Table): void {
