@@ -1,0 +1,62 @@
+@import '~@angular/material/theming';
+
+.filters {
+  padding: 5px 20px;
+  border-bottom: 1px solid #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.record {
+  background-color: #000;
+  border: 2px solid #000;
+
+  &:hover {
+    background-color: #232323;
+    border: 2px solid #232323;
+  }
+
+  &-active {
+    background-color: red;
+    border: 2px solid red;
+
+    &:hover {
+      background-color: #ff4548;
+      border: 2px solid #ff4548;
+    }
+  }
+}
+
+.clear {
+  position: relative;
+  border: 2px solid #eee;
+
+  &:hover {
+    border-color: #808080;
+  }
+
+
+  &:after {
+    content: '';
+    position: absolute;
+    height: 90%;
+    border: 1px solid transparent;
+    border-color: inherit;
+    transform: translate(-50%, 0) rotate(45deg);
+    top: 0;
+    left: 50%;
+  }
+}

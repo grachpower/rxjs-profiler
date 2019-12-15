@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -12,7 +12,7 @@
     "noEmitHelpers": false,
     "importHelpers": true,
     "strictNullChecks": false,
-    "outDir": "lib",
+    "outDir": "dist/lib",
     "lib": [
       "dom",
       "es2017",
@@ -24,7 +24,11 @@
     ]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "panel-app/**"
+  ],
+  "include": [
+    "lib/**/*"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,
