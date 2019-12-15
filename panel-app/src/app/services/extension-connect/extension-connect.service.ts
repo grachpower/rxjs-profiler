@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 
 import {MessageDto} from "../../../../../lib/models/message.model";
@@ -15,6 +15,18 @@ export class ExtensionConnectService {
   private rawData$ = new BehaviorSubject<MessageDto[]>([]);
   private appStatus$ = new BehaviorSubject<AppStatusTypes>(AppStatusTypes.RECEIVING);
 
+  constructor(
+    private zone: NgZone,
+  ) {}
+
+  public get status$(): Observable<AppStatusTypes> {
+    return this.appStatus$.asObservable();
+  }
+
+  public get data$(): Observable<MessageDto[]> {
+    return this.rawData$.asObservable();
+  }
+
   public init(): void {
     try {
       const tabId = chrome.devtools.inspectedWindow.tabId;
@@ -28,21 +40,22 @@ export class ExtensionConnectService {
     }
   }
 
-  public get data$(): Observable<MessageDto[]> {
-    return this.rawData$.asObservable();
-  }
-
   public startReceiving(): void {
-    this.appStatus$.next(AppStatusTypes.RECEIVING);
+    this.zone.run(() => {
+      this.appStatus$.next(AppStatusTypes.RECEIVING);
+    });
   }
 
   public stopReceiving(): void {
-    this.appStatus$.next(AppStatusTypes.STOPPED);
+    this.zone.run(() => {
+      this.appStatus$.next(AppStatusTypes.STOPPED);
+    });
   }
 
   public resetData(): void {
-    this.rawData$.next([]);
-    console.log('reload');
+    this.zone.run(() => {
+      this.rawData$.next([]);
+    });
   }
 
   private handleMessage(message: MessageDto): void {
@@ -53,6 +66,7 @@ export class ExtensionConnectService {
         break;
       case MessageTypes.RELOAD:
         this.resetData();
+        this.startReceiving();
         break;
     }
   }

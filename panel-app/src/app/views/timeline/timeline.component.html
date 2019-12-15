@@ -1,11 +1,8 @@
-<!--<div #container [hidden]="!(noData$ | async)">-->
-<!--</div>-->
+<app-timeline-container *ngIf="!(recording$ | async)">
+</app-timeline-container>
 
-<div #container>
-</div>
-
-
-
-<ng-container *ngIf="noData$ | async">
-  No Data...
+<ng-container *ngIf="recording$ | async">
+  <div class="recording">
+    RECORDING
+  </div>
 </ng-container>

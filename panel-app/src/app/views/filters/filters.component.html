@@ -1,0 +1,11 @@
+<div class="filters">
+  <div class="controls">
+    <div class="record button"
+         [ngClass]="{'record-active': isRecording$ | async}"
+         (click)="onRecordToggle()">
+    </div>
+
+    <div class="clear button" (click)="onClear()">
+    </div>
+  </div>
+</div>

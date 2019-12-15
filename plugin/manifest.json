@@ -1,7 +1,7 @@
 {
   "name": "RXJS-profiler",
   "version": "1.0",
-  "description": "Plugin to watch over RXJS stream",
+  "description": "Plugin to watch over RXJS stream, debug observable and memory leaks",
   "manifest_version": 2,
   "background": {
     "scripts": ["background.js"],
@@ -9,9 +9,7 @@
   },
   "permissions": [
     "activeTab",
-    "tabs",
-    "<all_urls>",
-    "https://www.gstatic.com/"
+    "<all_urls>"
   ],
   "content_security_policy": "script-src 'self' https://www.gstatic.com; object-src 'self'",
   "content_scripts": [

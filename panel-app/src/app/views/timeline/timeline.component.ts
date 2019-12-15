@@ -1,14 +1,9 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import {ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {map, shareReplay} from "rxjs/operators";
 
-import { SlotItemType } from "../../models/slot-item-model";
-import { TimelineService } from "../../services/timeline/timeline.service";
-
-declare var google: any;
-
-type Table = any;
-type Chart = any;
+import {TimelineService} from "../../services/timeline/timeline.service";
+import {ExtensionConnectService} from "../../services/extension-connect/extension-connect.service";
+import {AppStatusTypes} from "../../models/app-status-types";
 
 @Component({
   selector: 'app-timeline',
@@ -16,79 +11,19 @@ type Chart = any;
   styleUrls: ['./timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimelineComponent implements OnInit, OnDestroy {
-  @ViewChild('container', {static: true}) public container: ElementRef;
-
-  public noData$ = new Subject<boolean>();
-
-  private chart: Chart;
-  private options = {
-    timeline: {
-      groupByRowLabel: true,
-      colorByRowLabel: false,
-      showBarLabels: true,
-      showRowLabels: false,
-    },
-    height: '300',
-    // backgroundColor: '#ffd',
-    avoidOverlappingGridLines: true,
-  };
-  private destroyed$ = new Subject<void>();
+export class TimelineComponent implements OnInit {
+  public recording$ = this.extensionConnect.status$
+    .pipe(
+      map((status: AppStatusTypes) => status === AppStatusTypes.RECEIVING),
+      shareReplay({refCount: true, bufferSize: 1}),
+    );
 
   constructor(
     private timelineService: TimelineService,
+    private extensionConnect: ExtensionConnectService,
   ) { }
 
   public ngOnInit(): void {
-    google.charts.load("current", {packages:["timeline"]});
-    google.charts.setOnLoadCallback(this.initChart.bind(this));
-
-    this.noData$.next(true);
-  }
-
-  public ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  public initChart(): void {
-    const chart: Chart = new google.visualization.Timeline(this.container.nativeElement);
-    this.chart = chart;
-
-    this.timelineService.timelineData$
-      .pipe(
-        takeUntil(this.destroyed$),
-      ).subscribe((data: SlotItemType[]) => {
-        if (data.length > 0) {
-          const table: Table = this.createTable(data);
-          this.draw(table);
-
-          this.noData$.next(true);
-        } else {
-          this.noData$.next(false);
-        }
-    });
-  }
-
-  private draw(table: Table): void {
-    requestAnimationFrame(() => {
-      this.chart.draw(table, this.options);
-    });
-  }
-
-  private createTable(rows: SlotItemType[]): Table {
-    const dataTable = new google.visualization.DataTable();
-    dataTable.addColumn({ type: 'string', id: 'Group' });
-    dataTable.addColumn({ type: 'string', id: 'Name' });
-    dataTable.addColumn({ type: 'string', role: 'tooltip' });
-    dataTable.addColumn({ type: 'number', id: 'Start' });
-    dataTable.addColumn({ type: 'number', id: 'End' });
-
-    dataTable.addRows([
-      ...rows,
-    ]);
-
-    return dataTable;
   }
 
 }

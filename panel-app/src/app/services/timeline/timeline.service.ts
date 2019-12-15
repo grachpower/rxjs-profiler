@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
-import {interval, Observable, of} from "rxjs";
-import {map, switchMap} from "rxjs/operators";
+import {Observable, of} from "rxjs";
+import {switchMap} from "rxjs/operators";
 
 import {ExtensionConnectService} from "../extension-connect/extension-connect.service";
 import {SlotItemModel, SlotItemType} from "../../models/slot-item-model";
 import {MessageDto} from "../../../../../lib/models/message.model";
 import {MessageTypes} from "../../../../../lib/constants";
-
-const THROTTLE_TIME = 1000;
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +24,7 @@ export class TimelineService {
           return of([]);
         }
 
-        return interval(THROTTLE_TIME).pipe(
-          map(() => this.transformRawDataToSlots(items)),
-        );
+        return of(this.transformRawDataToSlots(items));
       }),
     );
   }
@@ -37,31 +33,34 @@ export class TimelineService {
     const subItems = items.filter((item: MessageDto) => item.type === MessageTypes.SUBSCRIBE);
     const unsubItems = items.filter((item: MessageDto) => item.type === MessageTypes.UNSUBSCRIBE);
 
-    const currentDate = Date.now();
-
     const initialModels: SlotItemModel[] = subItems.map((item: MessageDto) => {
-      const date = item.date > currentDate ? item.date + 1 : currentDate;
+      const newData = item.date + 1;
 
       return {
         name: item.name,
         description: item.trace,
         isEnded: false,
         startDate: item.date,
-        endDate: date,
+        endDate: newData,
       };
     });
 
     const outerModels: SlotItemModel[] = initialModels.map((item: SlotItemModel) => {
       const endItem = unsubItems.find((unsubElem: MessageDto) => unsubElem.name == item.name);
 
+      const newDate = Date.now();
+
       if (!endItem) {
-        return item;
+        return {
+          ...item,
+          endDate: newDate,
+        };
       } else {
-        const endDate = endItem.date > item.endDate ? endItem.date : item.endDate;
+        const endDate = endItem.date >= item.endDate ? endItem.date : item.endDate;
 
         return {
           name: item.name,
-          description: item.name,
+          description: item.description,
           isEnded: true,
           startDate: item.startDate,
           endDate: endDate,
@@ -77,6 +76,7 @@ export class TimelineService {
   }
 
   private transformSlotModelToSlotType(models: SlotItemModel[]): SlotItemType[] {
-    return models.map((model: SlotItemModel) => ['all', model.name, null, model.startDate, model.endDate] as SlotItemType);
+
+    return models.map((model: SlotItemModel) => ['all', `[${model.name}]:  ${model.description}` , null , model.startDate, model.endDate] as SlotItemType);
   }
 }
